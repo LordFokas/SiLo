@@ -61,10 +61,10 @@ var SiLo = (function(){
 		else callback();
 	}
 
+	function functions_all(){ return functions; }
 	function functions_add(key, func){ functions[key] = func; }
 	function functions_remove(key){ delete functions[key]; }
 	function functions_clear(){ functions = {}; }
-	function functions_all(){ return functions; }
 
 	function warnings_all(func){ warn_fallback = warn_no_key = warn_no_func = func; }
 	function warnings_fallback(func){ warn_fallback = func; }
@@ -72,29 +72,9 @@ var SiLo = (function(){
 	function warnings_no_function(func){ warn_no_func = func; }
 
 	return {
-		localize: {
-			all: localize_all,
-			recursive: localize_recursive,
-			class: localize_class
-		},
-
-		language: {
-			load: language_load,
-			cache: language_cache
-		},
-
-		functions: {
-			add: functions_add,
-			remove: functions_remove,
-			clear: functions_clear,
-			all: functions_all
-		},
-
-		warnings: {
-			all: warnings_all,
-			fallback: warnings_fallback,
-			no_key: warnings_no_key,
-			no_function: warnings_no_function
-		}
+		localize:  { all: localize_all, recursive: localize_recursive, class: localize_class },
+		language:  { load: language_load, cache: language_cache },
+		functions: { all: functions_all, add: functions_add, remove: functions_remove, clear: functions_clear },
+		warnings:  { all: warnings_all, fallback: warnings_fallback, no_key: warnings_no_key, no_function: warnings_no_function }
     };
 })();
