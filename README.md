@@ -17,10 +17,10 @@ A dictionary is merely an object with string values. We usually store these in J
     "test":{
       "helloworld": "Hello World"
     },
-    
+
     "name": "SiLo",
     "desc": "Stores and launches ICBMs"
-	}
+  }
 }
 ```
 The localization engine can look at keys such as `silo.test.helloworld` and properly traverse the dictionary to find the respective string. The translations don't all need to be in the same nesting level, you just need to select the proper keys. The behavior for when a key points to a non-string value is undefined: if it's a primitive it will likely be OK, if it's an object, function or array it will likely cause some form of error; however a custom function (more on that later) can probably handle it better.
