@@ -50,13 +50,13 @@ Custom functions must abide by the `func( element, str )` signature, where `elem
 + **SiLo.localize.class( className )** - Localizes all elements of class `className`.
 
 ## SiLo.functions
-+ **SiLo.functions.all( )**
-+ **SiLo.functions.add( key, func )**
-+ **SiLo.functions.remove( key )**
-+ **SiLo.functions.clear( )**
++ **SiLo.functions.all( )** - Retrieves the entire function map (object) so that you may read or modify it as you wish.
++ **SiLo.functions.add( key, func )** - Sets the `key` entry in the function map to `func`. This will replace the entry if it already exists, including built-in functions.
++ **SiLo.functions.remove( key )** - Removes the entry under this `key`. Can be used to remove added or built-in functions alike.
++ **SiLo.functions.clear( )** - Replaces the function map with a new blank object.
 
 ## SiLo.warnings
-+ **SiLo.warnings.all( func )**
-+ **SiLo.warnings.fallback( func )**
-+ **SiLo.warnings.no_key( func )**
-+ **SiLo.warnings.no_func( func )**
++ **SiLo.warnings.all( func )** - Registers `func` as the listener for all 3 warnings. Listeners must fulfill the `func( warn, param, full)` signature, where `warn` is a string describing the warning type, `param` is the parameter that failed, and `full` is the complete `data-silo-key` attribute of the element where the failure occured. This (and the other warning functions) is mostly useeful for development and debug purposes.
++ **SiLo.warnings.fallback( func )** - Sets `func` as the listener for when a key was not found in the current dictionary but is present in the fallback one (if one was set). The listener must respect the signature described in **SiLo.warnings.all**.
++ **SiLo.warnings.no_key( func )** - Sets `func` as the listener for when a key was not found in the current dictionary nor in the fallback one (if one was set). The listener must respect the signature described in **SiLo.warnings.all**.
++ **SiLo.warnings.no_func( func )** - Sets `func` as the listener for when a function is specified in an element but does not exist in the function map (if, for example, you made a typo or removed a function that was in use). The listener must respect the signature described in **SiLo.warnings.all**.
