@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>SiLo - 01 Basic Usage</title>
+	<script type="text/javascript" src="../silo.js"></script>
+
+	<script type="text/javascript">
+		var en_US = {
+			welcome_message: "Welcome to the first SiLo basic example. Click the links below to translate.",
+			always_english: "This sentence will always be in english because that is the fallback language.\n"
+				+"It will also generate a warning in the console when you change to portuguese because this "
+				+"example has the warnings set up to do so.",
+			lang: {
+				en_US: "English",
+				pt_PT: "Portuguese"
+			}
+		};
+
+		var pt_PT = {
+			welcome_message: "Bem vindo ao primeiro exemplo básico do SiLo. Clique nas ligações abaixo para traduzir.",
+			lang: {
+				en_US: "Inglês",
+				pt_PT: "Português"
+			}
+		};
+
+		function onBodyLoad(){
+			SiLo.warnings.all(console.error); // everything is a serious error
+			SiLo.warnings.fallback(console.warn); // but using fallbacks is tolerable
+
+			// Sets the current language to english.
+			// Makes it fallback: if something is not found in another language, english will be used.
+			// Fallback only needs to be used once, but is entirely optional.
+			SiLo.language.load(en_US, true);
+
+			// Localizes the entire document by recursively localizing all children of <body>.
+			SiLo.localize.all();
+		}
+
+		function toLang(lang){
+			SiLo.language.load(lang); // Set a new language
+			SiLo.localize.all(); // re-localize the document
+		}
+	</script>
+
+	<style type="text/css">
+		#root{ font-family: "Helvetica"; width: 600px; margin: auto; margin-top: 100px;
+			border: 1px solid #444; padding: 20px; }
+		#root>div:not(:last-child){ margin-bottom: 20px; }
+	</style>
+</head>
+
+
+<body onload="onBodyLoad();">
+	<div id="root">
+		<div data-silo-key="text:welcome_message"></div>
+		<div data-silo-key="text:always_english"></div>
+		<div>
+			<a href="javascript:toLang(en_US);" data-silo-key="string:lang.en_US"></a>
+			|
+			<a href="javascript:toLang(pt_PT);" data-silo-key="string:lang.pt_PT"></a>
+		</div>
+	</div>
+</body>
+</html>
