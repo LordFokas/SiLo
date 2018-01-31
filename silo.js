@@ -17,7 +17,7 @@ var SiLo = (function(){
 					var str = tree_find(keys, data[1], 0, language || {});
 					if(str === data[1] && fallback){
 						str = tree_find(keys, data[1], 0, fallback || {});
-						callback(warn_fallback, "warn_fallback", data[1], element.dataset.siloKey);
+						if(str !== data[1]) callback(warn_fallback, "warn_fallback", data[1], element.dataset.siloKey);
 					}
 					if(str === data[1]){
 						callback(warn_no_key, "warn_no_key", data[1], element.dataset.siloKey);
