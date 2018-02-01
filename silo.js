@@ -1,5 +1,5 @@
 var SiLo = (function(){
-	var language = null, fallback = null, cache = null, functions = null, warn_fallback = null, warn_no_key = null, warn_no_func = null;
+	var language = null, fallback = null, cache = {}, functions = null, warn_fallback = null, warn_no_key = null, warn_no_func = null;
 
 	function replace_all(s, t, r){ return s.split(t).join(r); }
 	function tree_find(keys, def, idx, obj){ ret = obj[keys[idx++]]; return ret ? (idx == keys.length ? ret : tree_find(keys, def, idx, ret)) : def; }
@@ -51,11 +51,12 @@ var SiLo = (function(){
 	function localize_class(className){ localize(document.getElementsByClassName(className)); }
 
 	function language_load(dictionary, makeFallback){ language = dictionary; if(makeFallback) fallback = dictionary; }
-	function language_cache(code, loader, makeFallback){
+	function language_cache(code, loader, relocalize, makeFallback){
 		var callback = function(dict){
 			if(!cache[code]) cache[code] = dict;
 			language = cache[code];
 			if(makeFallback) fallback = cache[code];
+			relocalize();
 		}
 		if(!cache[code]) loader(code, callback);
 		else callback();
