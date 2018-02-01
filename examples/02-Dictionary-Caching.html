@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>SiLo - 02 Dictionary Caching</title>
+	<script type="text/javascript" src="../silo.js"></script>
+
+	<script type="text/javascript">
+		var english = {
+			welcome_message: "Welcome to the SiLo caching example. Click the links below to translate.",
+			about_caching: "In this example both languages will take a while to load.\n"
+				+"But once they load they're cached and subsequent loads will be instantaneous.",
+			lang: {
+				en_US: "English",
+				pt_PT: "Portuguese"
+			}
+		};
+
+		var portuguese = {
+			welcome_message: "Bem vindo ao exemplo de 'caching' do SiLo. Clique nas ligações abaixo para traduzir.",
+			about_caching: "Neste exemplo ambas as linguagens demoram um pouco a carregar.\n"
+				+"Mas uma vez carregadas são guardadas em 'cache' e os carregamentos seguintes serão instantâneos.",
+			lang: {
+				en_US: "Inglês",
+				pt_PT: "Português"
+			}
+		};
+
+		function loadLang(code, callback){
+			console.log("Pretending to load language '" + code + "' from an AJAX request (taking 1,5s to load).");
+			setTimeout(function imagineThisIsAJAX(){
+				if(code == "en_US") callback(english);
+				else if(code == "pt_PT") callback(portuguese);
+				// by not calling callback(dictionary) for a language that doesn't exist, we silently abort.
+			}, 1500);
+		}
+
+		function onBodyLoad(){
+			// These 2 lines are optional and merely for debug purposes.
+			SiLo.warnings.all(console.error); // everything is a serious error
+			SiLo.warnings.fallback(console.warn); // but using fallbacks is tolerable
+			toLang("en_US");
+		}
+
+		// This is now needed because language switch can be sync and async, depending on caching status,
+		// and it's better to have a single callback to re-localize the document
+		// than to blindly relocalize twice in hopes to nail it.
+		function onLanguageLoaded(){
+			SiLo.localize.all();
+		}
+
+		function toLang(langCode){
+			// Equivalent to SiLo.language.cache(langCode, loadLang, SiLo.localize.all)
+			// But the way this works is simpler to understand if we have the onLanguageLoaded function
+			// So that it's dead obvious you can re-localize however you want.
+			SiLo.language.cache(langCode, loadLang, onLanguageLoaded); // Set a new language, by code, from cache.
+		}
+	</script>
+
+	<style type="text/css">
+		#root{ font-family: "Helvetica"; width: 600px; margin: auto; margin-top: 100px;
+			border: 1px solid #444; padding: 20px; }
+		#root>div:not(:last-child){ margin-bottom: 20px; }
+	</style>
+</head>
+
+
+<body onload="onBodyLoad();">
+	<div id="root">
+		<!-- Did I mention you can still have default messages while the language loads / in case JS is disabled?? -->
+		<div data-silo-key="text:welcome_message">Please wait...</div>
+		<div data-silo-key="text:about_caching"></div>
+		<div>
+			<a href="javascript:toLang('en_US');" data-silo-key="string:lang.en_US"></a>
+			|
+			<a href="javascript:toLang('pt_PT');" data-silo-key="string:lang.pt_PT"></a>
+		</div>
+	</div>
+</body>
+</html>
