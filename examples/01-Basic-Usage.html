@@ -14,7 +14,8 @@
 			lang: {
 				en_US: "English",
 				pt_PT: "Portuguese"
-			}
+			},
+			boot_message: "This proves we can also directly translate a string with SiLo to use somewhere that is not the DOM tree."
 		};
 
 		var pt_PT = {
@@ -35,8 +36,15 @@
 			// Fallback only needs to be used once, but is entirely optional.
 			SiLo.language.load(en_US, true);
 
+			// This tells SiLo to look for data in data-lang attributes.
+			// If not specified the default is "siloKey", which looks for data-silo-key attributes.
+			SiLo.language.key("lang");
+
 			// Localizes the entire document by recursively localizing all children of <body>.
 			SiLo.localize.all();
+
+			// Fetch a string in the current language to use somewhere that is not the DOM tree.
+			console.info(SiLo.localize.fetch("boot_message"));
 		}
 
 		function toLang(lang){
@@ -55,12 +63,12 @@
 
 <body onload="onBodyLoad();">
 	<div id="root">
-		<div data-silo-key="text:welcome_message"></div>
-		<div data-silo-key="text:always_english"></div>
+		<div data-lang="text:welcome_message"></div>
+		<div data-lang="text:always_english"></div>
 		<div>
-			<a href="javascript:toLang(en_US);" data-silo-key="string:lang.en_US"></a>
+			<a href="javascript:toLang(en_US);" data-lang="string:lang.en_US tooltip:lang.en_US"></a>
 			|
-			<a href="javascript:toLang(pt_PT);" data-silo-key="string:lang.pt_PT"></a>
+			<a href="javascript:toLang(pt_PT);" data-lang="string:lang.pt_PT tooltip:lang.pt_PT"></a>
 		</div>
 	</div>
 </body>

@@ -5,9 +5,12 @@ It is aimed explicitely at browsers.
 
 # SiLo - How to use
 1. Add your keys to the HTML tags. What you'd write as `<span>Hello World</span>` now should become `<span data-silo-key="string:silo.test.helloworld"></span>`. The specification for the `data-silo-key` attribute is `func:key` where `func` represents a function that loads text into an element (more on that later) and `key` represents a path within the dictionary to a localized string to load (more on that later as well).
-0. Load your dictionary into **SiLo** by calling one of the `SiLo.language.*( ... )` functions.
+0. Load your dictionary into **SiLo** by calling the `SiLo.language.load( ... )` function.
 0. Call one of the `SiLo.localize.*( ... )` functions to have the text written into the element(s).
 0. Repeat steps 2 & 3 every time you change languages. Repeat step 3 everytime your scripts add new localizable DOM Elements.
+
+**Tip:** You can have more than one `func:key` pair in a single element by separating them with spaces like this: `f1:key1 f2:key2 f3:key3`.
+**Tip:** If you don't like using `data-silo-key` as an attribute you can call `SiLo.language.key( key )` to change it. Read the documentation on that function (further down) to know more about how to use it.
 
 # SiLo - Dictionary Format
 A dictionary is merely an object with string values. We usually store these in JSON files and retrieve them by AJAX as needed, like this:
@@ -42,12 +45,13 @@ Custom functions must abide by the `func( element, str )` signature, where `elem
 # SiLo - Library Summary
 ## SiLo.language
 + **SiLo.language.load( dictionary, makeFallback )** - Sets the `dictionary` object as the current dictionary. If `makeFallback` is true this dictionary will also be set as the fallback dictionary for when a key can't be found in the current one (for example, to write in english if a sentence is unavailable in the current language).
-+ **SiLo.language.cache( code, loader, relocalize, makeFallback )** - Sets the current dictionary from cache. If there is no `code` entry in the cache, `loader` (a callback you must provide) will be asked to load it; the `loader` must follow the `loader( code, callback )` signature, where `code` is the same language/country code entry missing from cache and `callback( dictionary )` must be called once you successfuly load the dictionary file -- not calling it simply results in the operation being aborted. When the language finishes loading, `relocalize` will be called: this is a callback you provide so that you can relocalize the document once the language switching is done successfully. `makeFallback` works in the same way as in the simpler **load** function.
++ **SiLo.language.key( key )** - Sets the `data-*` attribute SiLo looks for data in. This abides by the `data-*` attribute specification, meaning for attributes like `data-foo` the key is simply `foo` while for attributes like `data-my-awesome-lang-key` the key is actually `myAwesomeLangKey` as dashes are removed and the next letter capitalized in the javascript interface that handles `data-*` attributes; the `data-` prefix is also removed. (If you look in the code, the default key that matches `data-silo-key` is `siloKey`).
 
 ## SiLo.localize
 + **SiLo.localize.all( )** - Localizes the entire document. The same as calling `Silo.localize.recursive(document.body)`.
 + **SiLo.localize.recursive( element )** - Localizes `element` and all its descendants recursively.
 + **SiLo.localize.class( className )** - Localizes all elements of class `className`.
++ **SiLo.localize.fetch( key )** - Fetches the localization for a dictionary key, to use somewhere besides the DOM tree. If the key is not found, `null` will be returned. Warnings for missing keys are still issued as usual (See `SiLo.warnnings.*( ...)` function docs).
 
 ## SiLo.functions
 + **SiLo.functions.all( )** - Retrieves the entire function map (object) so that you may read or modify it as you wish.
