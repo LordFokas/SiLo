@@ -10,6 +10,7 @@ It is aimed explicitely at browsers.
 0. Repeat steps 2 & 3 every time you change languages. Repeat step 3 everytime your scripts add new localizable DOM Elements.
 
 **Tip:** You can have more than one `func:key` pair in a single element by separating them with spaces like this: `f1:key1 f2:key2 f3:key3`.
+
 **Tip:** If you don't like using `data-silo-key` as an attribute you can call `SiLo.language.key( key )` to change it. Read the documentation on that function (further down) to know more about how to use it.
 
 # SiLo - Dictionary Format
